@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
 const expressValidator = require('express-validator')
+var cookerParser = require('cookie-parser')
 dotenv.config()
 
 //db
@@ -16,12 +17,15 @@ mongoose.connection.on('error',err=>{
 })
 //bring in routes
 const postRoutes = require('./routes/post')
+const authRoutes = require('./routes/auth')
 
 //middleware
 app.use(morgan("dev"));
 app.use(bodyParser.json());
+app.use(cookerParser());
 app.use(expressValidator());
 app.use("/", postRoutes);
+app.use("/", authRoutes);
 
 const port = process.env.PORT || 9000;
 app.listen(port,()=>{
